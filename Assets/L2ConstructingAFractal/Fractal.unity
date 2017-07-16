@@ -229,7 +229,7 @@ MonoBehaviour:
   - {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
   - {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
   _material: {fileID: 2100000, guid: 8499e1973e13ac94e928825825b61322, type: 2}
-  _maxDepth: 5
+  _maxDepth: 4
   _childScale: 0.5
   _spawnProbability: 0.8
   _maxRotationSpeed: 60
