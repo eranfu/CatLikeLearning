@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 23963591594739396}
   - component: {fileID: 54705985116994868}
   - component: {fileID: 114029425205215090}
+  - component: {fileID: 65029491526773708}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -56,7 +57,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 9fff75e2064d3bb43b841ada275f15bd, type: 2}
+  - {fileID: 2100000, guid: 8499e1973e13ac94e928825825b61322, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -92,11 +93,23 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &65029491526773708
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1075251690615318}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114029425205215090
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -3,15 +3,31 @@
 namespace L4ObjectPools
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class Stuff : MonoBehaviour
+    public class Stuff : PooledObject
     {
-        private Rigidbody _body;
+        public Rigidbody Body { get; private set; }
+        private MeshRenderer[] _meshRenderers;
 
         private void Awake()
         {
-            _body = GetComponent<Rigidbody>();
+            Body = GetComponent<Rigidbody>();
+            _meshRenderers = GetComponentsInChildren<MeshRenderer>();
         }
 
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("KillZone"))
+            {
+                ReturnToPool();
+            }
+        }
 
+        public void SetMaterial(Material m)
+        {
+            foreach (MeshRenderer meshRenderer in _meshRenderers)
+            {
+                meshRenderer.material = m;
+            }
+        }
     }
 }
