@@ -14,7 +14,9 @@ namespace L3FramesPerSecond
             public int minimumFPS;
         }
 
-        [SerializeField] private Text _highestFPSLabel, _averageFPSLabel, _lowestFPSLabel;
+        [SerializeField] private Text _highestFPSLabel;
+        [SerializeField] private Text _averageFPSLabel;
+        [SerializeField] private Text _lowestFPSLabel;
         [SerializeField] private FPSColor[] _coloring;
         private FPSCounter _fpsCounter;
 
