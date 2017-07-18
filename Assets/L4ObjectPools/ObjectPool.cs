@@ -17,5 +17,18 @@ namespace L4ObjectPools
         {
             Destroy(o.gameObject);
         }
+
+        public static ObjectPool InstanceOfPrefab(PooledObject prefab)
+        {
+            ObjectPool[] objectPools = FindObjectsOfType<ObjectPool>();
+            foreach (ObjectPool pool in objectPools)
+            {
+                if (pool.name == prefab.name + "Pool")
+                    return pool;
+            }
+            var objectPool = new GameObject(prefab.name + "Pool").AddComponent<ObjectPool>();
+            objectPool._prefab = prefab;
+            return objectPool;
+        }
     }
 }

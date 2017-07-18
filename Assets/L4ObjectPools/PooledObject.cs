@@ -8,7 +8,7 @@ namespace L4ObjectPools
 
         public T GetPooledInstance<T>() where T : PooledObject
         {
-            throw new System.NotImplementedException();
+            return (T) ObjectPool.InstanceOfPrefab(this).GetObject();
         }
 
         public void ReturnToPool()
