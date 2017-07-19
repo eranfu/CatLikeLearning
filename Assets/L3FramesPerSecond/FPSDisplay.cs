@@ -8,19 +8,19 @@ namespace L3FramesPerSecond
     public class FPSDisplay : MonoBehaviour
     {
         [Serializable]
-        private struct FPSColor
+        private struct FpsColor
         {
-            public Color color;
-            public int minimumFPS;
+            public Color Color;
+            public int MinimumFps;
         }
 
-        [SerializeField] private Text _highestFPSLabel;
-        [SerializeField] private Text _averageFPSLabel;
-        [SerializeField] private Text _lowestFPSLabel;
-        [SerializeField] private FPSColor[] _coloring;
+        [SerializeField] private Text _highestFpsLabel;
+        [SerializeField] private Text _averageFpsLabel;
+        [SerializeField] private Text _lowestFpsLabel;
+        [SerializeField] private FpsColor[] _coloring;
         private FPSCounter _fpsCounter;
 
-        private static readonly string[] stringsFrom0To99 =
+        private static readonly string[] StringsFrom0To99 =
         {
             "00", "01", "02", "03", "04", "05", "06", "07", "08", "09",
             "10", "11", "02", "03", "04", "05", "06", "07", "08", "09",
@@ -41,18 +41,18 @@ namespace L3FramesPerSecond
 
         private void Update()
         {
-            Display(_highestFPSLabel, _fpsCounter.HighestFPS);
-            Display(_averageFPSLabel, _fpsCounter.AverageFPS);
-            Display(_lowestFPSLabel, _fpsCounter.LowestFPS);
+            Display(_highestFpsLabel, _fpsCounter.HighestFps);
+            Display(_averageFpsLabel, _fpsCounter.AverageFps);
+            Display(_lowestFpsLabel, _fpsCounter.LowestFps);
         }
 
         private void Display(Text label, int fps)
         {
-            label.text = stringsFrom0To99[Mathf.Clamp(fps, 0, 99)];
+            label.text = StringsFrom0To99[Mathf.Clamp(fps, 0, 99)];
             for (var i = 0; i < _coloring.Length; i++)
             {
-                if (_coloring[i].minimumFPS > fps) continue;
-                label.color = _coloring[i].color;
+                if (_coloring[i].MinimumFps > fps) continue;
+                label.color = _coloring[i].Color;
                 break;
             }
         }

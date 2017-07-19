@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace L4ObjectPools
 {
@@ -12,6 +13,10 @@ namespace L4ObjectPools
         {
             Body = GetComponent<Rigidbody>();
             _meshRenderers = GetComponentsInChildren<MeshRenderer>();
+            SceneManager.sceneLoaded += (scene, mode) =>
+            {
+                ReturnToPool();
+            };
         }
 
         private void OnTriggerEnter(Collider other)

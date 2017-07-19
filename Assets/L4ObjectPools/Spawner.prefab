@@ -52,18 +52,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _timeBetweenSpawns:
-    min: 0.05
-    max: 0.15
+    Min: 0.05
+    Max: 0.15
   _scale:
-    min: 0.25
-    max: 1
+    Min: 0.25
+    Max: 1
   _velocity: 17
   _randomVelocity:
-    min: 0
-    max: 3
+    Min: 0
+    Max: 3
   _angulerVelocity:
-    min: 0
-    max: 4
+    Min: 0
+    Max: 4
   _stuffPrefabs:
   - {fileID: 114029425205215090, guid: cb89150e66687e544a9f6317ebffe198, type: 2}
   - {fileID: 114029425205215090, guid: cb89150e66687e544a9f6317ebffe198, type: 2}

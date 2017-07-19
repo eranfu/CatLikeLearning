@@ -1,14 +1,21 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace L4ObjectPools
 {
     public class PooledObject : MonoBehaviour
     {
-        public ObjectPool Pool { get; set; }
+        public ObjectPool Pool { private get; set; }
+
+        [NonSerialized] private ObjectPool _poolInstanceForPrefab;
 
         public T GetPooledInstance<T>() where T : PooledObject
         {
-            return (T) ObjectPool.InstanceOfPrefab(this).GetObject();
+            if (_poolInstanceForPrefab == null)
+            {
+                _poolInstanceForPrefab = ObjectPool.GeneratePool(this);
+            }
+            return (T) _poolInstanceForPrefab.GetObject();
         }
 
         public void ReturnToPool()

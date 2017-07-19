@@ -38,9 +38,9 @@ GameObject:
   - component: {fileID: 224260849126269484}
   - component: {fileID: 222999986839138068}
   - component: {fileID: 114188109784101734}
-  - component: {fileID: 114382812452376966}
-  - component: {fileID: 114823860759741090}
   - component: {fileID: 114256338404351318}
+  - component: {fileID: 114982205184120898}
+  - component: {fileID: 114780490565787610}
   m_Layer: 5
   m_Name: FPSPanel
   m_TagString: Untagged
@@ -131,18 +131,6 @@ MonoBehaviour:
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
   m_ChildControlHeight: 1
---- !u!114 &114382812452376966
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1464267225324612}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d946df9cbb49be41b0acbb74ce84cb2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _frameRange: 60
 --- !u!114 &114537332021292380
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -209,6 +197,31 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 99
+--- !u!114 &114780490565787610
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1464267225324612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 830e312c7357e4f4f8fbc9ba285d6fbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _highestFpsLabel: {fileID: 114800955291271110}
+  _averageFpsLabel: {fileID: 114607698450690162}
+  _lowestFpsLabel: {fileID: 114537332021292380}
+  _coloring:
+  - Color: {r: 0, g: 0.83448315, b: 1, a: 1}
+    MinimumFps: 60
+  - Color: {r: 0, g: 1, b: 0.37931037, a: 0}
+    MinimumFps: 45
+  - Color: {r: 0.42387545, g: 0.42663166, b: 0.8235294, a: 0}
+    MinimumFps: 30
+  - Color: {r: 1, g: 0.6413793, b: 0, a: 0}
+    MinimumFps: 15
+  - Color: {r: 1, g: 0, b: 0, a: 0}
+    MinimumFps: 0
 --- !u!114 &114800955291271110
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -242,7 +255,7 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 99
---- !u!114 &114823860759741090
+--- !u!114 &114982205184120898
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -250,23 +263,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1464267225324612}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 830e312c7357e4f4f8fbc9ba285d6fbb, type: 3}
+  m_Script: {fileID: 11500000, guid: 8d946df9cbb49be41b0acbb74ce84cb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _highestFPSLabel: {fileID: 114800955291271110}
-  _averageFPSLabel: {fileID: 114607698450690162}
-  _lowestFPSLabel: {fileID: 114537332021292380}
-  _coloring:
-  - color: {r: 0.74509805, g: 1, b: 1, a: 1}
-    minimumFPS: 60
-  - color: {r: 0.5686275, g: 1, b: 0.40784317, a: 1}
-    minimumFPS: 45
-  - color: {r: 1, g: 1, b: 0, a: 1}
-    minimumFPS: 30
-  - color: {r: 1, g: 0.57254905, b: 0, a: 1}
-    minimumFPS: 15
-  - color: {r: 1, g: 0, b: 0, a: 1}
-    minimumFPS: 0
+  _frameRange: 60
 --- !u!222 &222461414846519310
 CanvasRenderer:
   m_ObjectHideFlags: 1

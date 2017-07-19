@@ -25,7 +25,7 @@ namespace L4ObjectPools
         private void SpawnStuff()
         {
             Stuff prefab = _stuffPrefabs[Random.Range(0, _stuffPrefabs.Length)];
-            Stuff spawn = prefab.GetPooledInstance<Stuff>();
+            var spawn = prefab.GetPooledInstance<Stuff>();
             spawn.transform.localPosition = transform.position;
             spawn.transform.localScale = Vector3.one * _scale.RandomInRange;
             spawn.transform.localRotation = Random.rotation;

@@ -1,34 +1,43 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace L4ObjectPools
 {
     public class ObjectPool : MonoBehaviour
     {
-        [SerializeField] private PooledObject _prefab;
+        private PooledObject _prefab;
+        private readonly List<PooledObject> _availableObjects = new List<PooledObject>();
 
         public PooledObject GetObject()
         {
-            PooledObject obj = Instantiate(_prefab, transform);
-            obj.Pool = this;
+            PooledObject obj;
+            int lastIndex = _availableObjects.Count - 1;
+            if (lastIndex >= 0)
+            {
+                obj = _availableObjects[lastIndex];
+                _availableObjects.RemoveAt(lastIndex);
+                obj.gameObject.SetActive(true);
+            }
+            else
+            {
+                obj = Instantiate(_prefab, transform);
+                obj.Pool = this;
+            }
             return obj;
         }
 
         public void AddObject(PooledObject o)
         {
-            Destroy(o.gameObject);
+            _availableObjects.Add(o);
+            o.gameObject.SetActive(false);
         }
 
-        public static ObjectPool InstanceOfPrefab(PooledObject prefab)
+        public static ObjectPool GeneratePool(PooledObject prefab)
         {
-            ObjectPool[] objectPools = FindObjectsOfType<ObjectPool>();
-            foreach (ObjectPool pool in objectPools)
-            {
-                if (pool.name == prefab.name + "Pool")
-                    return pool;
-            }
-            var objectPool = new GameObject(prefab.name + "Pool").AddComponent<ObjectPool>();
-            objectPool._prefab = prefab;
-            return objectPool;
+            var pool = new GameObject(prefab.name + "Pool").AddComponent<ObjectPool>();
+            pool._prefab = prefab;
+            DontDestroyOnLoad(pool);
+            return pool;
         }
     }
 }

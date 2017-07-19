@@ -4,4 +4,10 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/L4ObjectPools/ObjectPools.unity
+    guid: 21ef658e258407940b7c78da6b15ef5e
+  - enabled: 1
+    path: Assets/L4ObjectPools/ObjectPools 1.unity
+    guid: 27ab7473edc18354b8bd6f8338fea249

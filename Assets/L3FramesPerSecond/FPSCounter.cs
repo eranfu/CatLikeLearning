@@ -5,9 +5,9 @@ namespace L3FramesPerSecond
     public class FPSCounter : MonoBehaviour
     {
         [SerializeField] private int _frameRange = 60;
-        public int AverageFPS { get; private set; }
-        public int HighestFPS { get; private set; }
-        public int LowestFPS { get; private set; }
+        public int AverageFps { get; private set; }
+        public int HighestFps { get; private set; }
+        public int LowestFps { get; private set; }
 
         private int[] _fpsBuffer;
         private int _fpsBufferIndex;
@@ -17,23 +17,23 @@ namespace L3FramesPerSecond
             if (_fpsBuffer == null || _fpsBuffer.Length != _frameRange)
                 InitializeBuffer();
             UpdateBuffer();
-            CalculateFPS();
+            CalculateFps();
         }
 
-        private void CalculateFPS()
+        private void CalculateFps()
         {
             var sum = 0;
-            LowestFPS = int.MaxValue;
-            HighestFPS = 0;
+            LowestFps = int.MaxValue;
+            HighestFps = 0;
             foreach (int fps in _fpsBuffer)
             {
                 sum += fps;
-                if (fps < LowestFPS)
-                    LowestFPS = fps;
-                else if (fps > HighestFPS)
-                    HighestFPS = fps;
+                if (fps < LowestFps)
+                    LowestFps = fps;
+                else if (fps > HighestFps)
+                    HighestFps = fps;
             }
-            AverageFPS = sum / _fpsBuffer.Length;
+            AverageFps = sum / _fpsBuffer.Length;
         }
 
         private void UpdateBuffer()
