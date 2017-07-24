@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1750196086}
-  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.57481706, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -491,7 +491,7 @@ Prefab:
     - target: {fileID: 224838485198552768, guid: b92d1c45de6af294c9089e17b6942b9a,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -13.4366665
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224838485198552768, guid: b92d1c45de6af294c9089e17b6942b9a,
         type: 2}
@@ -501,7 +501,7 @@ Prefab:
     - target: {fileID: 224838485198552768, guid: b92d1c45de6af294c9089e17b6942b9a,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 26.873333
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224853307900791746, guid: b92d1c45de6af294c9089e17b6942b9a,
         type: 2}
@@ -521,7 +521,7 @@ Prefab:
     - target: {fileID: 224853307900791746, guid: b92d1c45de6af294c9089e17b6942b9a,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -40.309998
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224853307900791746, guid: b92d1c45de6af294c9089e17b6942b9a,
         type: 2}
@@ -531,7 +531,7 @@ Prefab:
     - target: {fileID: 224853307900791746, guid: b92d1c45de6af294c9089e17b6942b9a,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 26.873333
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224045771304357650, guid: b92d1c45de6af294c9089e17b6942b9a,
         type: 2}
@@ -551,7 +551,7 @@ Prefab:
     - target: {fileID: 224045771304357650, guid: b92d1c45de6af294c9089e17b6942b9a,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -67.183334
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224045771304357650, guid: b92d1c45de6af294c9089e17b6942b9a,
         type: 2}
@@ -561,7 +561,7 @@ Prefab:
     - target: {fileID: 224045771304357650, guid: b92d1c45de6af294c9089e17b6942b9a,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 26.873333
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b92d1c45de6af294c9089e17b6942b9a, type: 2}
