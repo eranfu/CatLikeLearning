@@ -6,7 +6,7 @@ namespace L4ObjectPools
     [Serializable]
     public struct FloatRange
     {
-        public float Min, Max;
-        public float RandomInRange => Random.Range(Min, Max);
+        public float min, max;
+        public float RandomInRange => Random.Range(min, max);
     }
 }

@@ -7,16 +7,29 @@ namespace L5CurvesAndSplines.Editor
     [CustomEditor(typeof(BezierCurve))]
     public class BezierCurveInspector : UnityEditor.Editor
     {
-        private BezierCurve _curve;
-        private Transform _handleTransform;
-        private Quaternion _handleRatation;
-        private int _lineSteps;
-        private float _directionScale;
+        private BezierCurve curve;
+        private Transform handleTransform;
+        private Quaternion handleRatation;
+        private int lineSteps;
+        private float directionScale;
+        
+        private void Awake()
+        {
+            curve = target as BezierCurve;
+            if (curve == null) return;
+            handleTransform = curve.transform;
+        }
+
+        private void OnEnable()
+        {
+            lineSteps = 10;
+            directionScale = 0.5f;
+        }
 
         private void OnSceneGUI()
         {
-            _handleRatation = Tools.pivotRotation == PivotRotation.Local
-                ? _handleTransform.rotation
+            handleRatation = Tools.pivotRotation == PivotRotation.Local
+                ? handleTransform.rotation
                 : Quaternion.identity;
 
             Vector3 p0 = ShowPoint(0);
@@ -26,7 +39,6 @@ namespace L5CurvesAndSplines.Editor
 
             Handles.color = Color.gray;
             Handles.DrawLine(p0, p1);
-            Handles.DrawLine(p1, p2);
             Handles.DrawLine(p2, p3);
 
             Handles.DrawBezier(p0, p3, p1, p2, Color.white, null, 2);
@@ -36,36 +48,23 @@ namespace L5CurvesAndSplines.Editor
         private void ShowDirections()
         {
             Handles.color = Color.green;
-            for (var i = 0; i < _lineSteps; ++i)
+            for (var i = 0; i < lineSteps; ++i)
             {
-                Vector3 point = _curve.GetPoint(i / (float) _lineSteps);
-                Handles.DrawLine(point, point + _curve.GetDirection(i / (float) _lineSteps) * _directionScale);
+                Vector3 point = curve.GetPoint(i / (float) lineSteps);
+                Handles.DrawLine(point, point + curve.GetDirection(i / (float) lineSteps) * directionScale);
             }
-        }
-
-        private void Awake()
-        {
-            _curve = target as BezierCurve;
-            if (_curve == null) return;
-            _handleTransform = _curve.transform;
         }
 
         private Vector3 ShowPoint(int index)
         {
-            Vector3 point = _handleTransform.TransformPoint(_curve.points[index]);
+            Vector3 point = handleTransform.TransformPoint(curve.points[index]);
             EditorGUI.BeginChangeCheck();
-            point = Handles.DoPositionHandle(point, _handleRatation);
+            point = Handles.DoPositionHandle(point, handleRatation);
             if (!EditorGUI.EndChangeCheck()) return point;
-            Undo.RecordObject(_curve, "Move Point");
-            EditorUtility.SetDirty(_curve);
-            _curve.points[index] = _handleTransform.InverseTransformPoint(point);
+            Undo.RecordObject(curve, "Move Point");
+            EditorUtility.SetDirty(curve);
+            curve.points[index] = handleTransform.InverseTransformPoint(point);
             return point;
-        }
-
-        private void OnEnable()
-        {
-            _lineSteps = 10;
-            _directionScale = 0.5f;
         }
     }
 }

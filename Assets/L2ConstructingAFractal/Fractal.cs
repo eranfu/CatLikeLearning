@@ -5,7 +5,7 @@ namespace L2ConstructingAFractal
 {
     public class Fractal : MonoBehaviour
     {
-        private static readonly Vector3[] ChildDirections =
+        private static readonly Vector3[] childDirections =
         {
             Vector3.up,
             Vector3.right,
@@ -14,7 +14,7 @@ namespace L2ConstructingAFractal
             Vector3.back,
         };
 
-        private static readonly Quaternion[] ChildOrientations =
+        private static readonly Quaternion[] childOrientations =
         {
             Quaternion.identity,
             Quaternion.Euler(0, 0, -90),
@@ -23,49 +23,49 @@ namespace L2ConstructingAFractal
             Quaternion.Euler(-90, 0, 0)
         };
 
-        [SerializeField] private Mesh[] _meshes;
-        [SerializeField] private Material _material;
-        [SerializeField] private int _maxDepth;
-        [SerializeField] private float _childScale;
-        [Range(0, 1)] [SerializeField] private float _spawnProbability;
-        private int _depth;
-        private Material[,] _materials;
-        private float _rotationSpeed;
-        [SerializeField] private float _maxRotationSpeed;
-        [Range(0, 360)] [SerializeField] private int _maxTwist;
+        [SerializeField] private Mesh[] meshes;
+        [SerializeField] private Material material;
+        [SerializeField] private int maxDepth;
+        [SerializeField] private float childScale;
+        [Range(0, 1)] [SerializeField] private float spawnProbability;
+        private int depth;
+        private Material[,] materials;
+        private float rotationSpeed;
+        [SerializeField] private float maxRotationSpeed;
+        [Range(0, 360)] [SerializeField] private int maxTwist;
 
         private void InitializeMaterials()
         {
-            _materials = new Material[_maxDepth + 1, 2];
-            for (var i = 0; i <= _maxDepth; ++i)
+            materials = new Material[maxDepth + 1, 2];
+            for (var i = 0; i <= maxDepth; ++i)
             {
-                var t = i / (_maxDepth - 1f);
+                var t = i / (maxDepth - 1f);
                 t *= t;
-                _materials[i, 0] = new Material(_material)
+                materials[i, 0] = new Material(material)
                 {
                     color = Color.Lerp(Color.white, Color.yellow, t)
                 };
-                _materials[i, 1] = new Material(_material)
+                materials[i, 1] = new Material(material)
                 {
                     color = Color.Lerp(Color.white, Color.cyan, t)
                 };
             }
-            _materials[_maxDepth, 0].color = Color.magenta;
-            _materials[_maxDepth, 1].color = Color.red;
+            materials[maxDepth, 0].color = Color.magenta;
+            materials[maxDepth, 1].color = Color.red;
         }
 
         private void Start()
         {
-            if (_materials == null)
+            if (materials == null)
             {
                 InitializeMaterials();
             }
 
-            _rotationSpeed = Random.Range(-_maxRotationSpeed, _maxRotationSpeed);
-            transform.Rotate(Random.Range(-_maxTwist, _maxTwist), 0, 0);
-            gameObject.AddComponent<MeshFilter>().mesh = _meshes[Random.Range(0, _meshes.Length)];
-            gameObject.AddComponent<MeshRenderer>().material = _materials[_depth, Random.Range(0, 2)];
-            if (_depth < _maxDepth)
+            rotationSpeed = Random.Range(-maxRotationSpeed, maxRotationSpeed);
+            transform.Rotate(Random.Range(-maxTwist, maxTwist), 0, 0);
+            gameObject.AddComponent<MeshFilter>().mesh = meshes[Random.Range(0, meshes.Length)];
+            gameObject.AddComponent<MeshRenderer>().material = materials[depth, Random.Range(0, 2)];
+            if (depth < maxDepth)
             {
                 StartCoroutine(CreateChildren());
             }
@@ -73,14 +73,14 @@ namespace L2ConstructingAFractal
 
         private void Update()
         {
-            transform.Rotate(0, _rotationSpeed * Time.deltaTime, 0f);
+            transform.Rotate(0, rotationSpeed * Time.deltaTime, 0f);
         }
 
         private IEnumerator CreateChildren()
         {
-            for (var i = 0; i < ChildDirections.Length; ++i)
+            for (var i = 0; i < childDirections.Length; ++i)
             {
-                if (Random.value > _spawnProbability) continue;
+                if (Random.value > spawnProbability) continue;
                 yield return new WaitForSeconds(Random.Range(0, 0.5f));
                 new GameObject("Fractal Child").AddComponent<Fractal>()
                     .Initialize(this, i);
@@ -89,19 +89,19 @@ namespace L2ConstructingAFractal
 
         private void Initialize(Fractal parent, int i)
         {
-            _meshes = parent._meshes;
-            _materials = parent._materials;
-            _maxDepth = parent._maxDepth;
-            _depth = parent._depth + 1;
-            _childScale = parent._childScale;
-            _spawnProbability = parent._spawnProbability;
-            _maxRotationSpeed = parent._maxRotationSpeed;
-            _maxTwist = parent._maxTwist;
+            meshes = parent.meshes;
+            materials = parent.materials;
+            maxDepth = parent.maxDepth;
+            depth = parent.depth + 1;
+            childScale = parent.childScale;
+            spawnProbability = parent.spawnProbability;
+            maxRotationSpeed = parent.maxRotationSpeed;
+            maxTwist = parent.maxTwist;
 
             transform.parent = parent.transform;
-            transform.localScale = Vector3.one * _childScale;
-            transform.localPosition = ChildDirections[i] * (0.5f + 0.5f * _childScale);
-            transform.localRotation = ChildOrientations[i];
+            transform.localScale = Vector3.one * childScale;
+            transform.localPosition = childDirections[i] * (0.5f + 0.5f * childScale);
+            transform.localRotation = childOrientations[i];
         }
     }
 }

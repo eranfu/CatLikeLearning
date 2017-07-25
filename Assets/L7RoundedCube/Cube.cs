@@ -7,8 +7,8 @@ namespace L7RoundedCube
     {
         public int xSize, ySize, zSize;
 
-        private Mesh _mesh;
-        private Vector3[] _vertices;
+        private Mesh mesh;
+        private Vector3[] vertices;
 
         private void Awake()
         {
@@ -17,15 +17,15 @@ namespace L7RoundedCube
 
         private void Generate()
         {
-            GetComponent<MeshFilter>().mesh = _mesh = new Mesh();
-            _mesh.name = "Procedural Cube";
+            GetComponent<MeshFilter>().mesh = mesh = new Mesh();
+            mesh.name = "Procedural Cube";
 
             var cornerVertices = 8;
             int edgeVertices = (xSize + ySize + zSize - 3) * 4;
             int faceVertices = 2 * ((xSize - 1) * (ySize - 1) +
                                     (ySize - 1) * (zSize - 1) +
                                     (zSize - 1) * (xSize - 1));
-            _vertices = new Vector3[cornerVertices + edgeVertices + faceVertices];
+            vertices = new Vector3[cornerVertices + edgeVertices + faceVertices];
             var vi = 0;
             for (var x = 0; x <= xSize; x++)
             {
@@ -34,7 +34,7 @@ namespace L7RoundedCube
                     for (var z = 0; z <= zSize; z++)
                     {
                         if (z != 0 && z != zSize) continue;
-                        _vertices[vi++] = new Vector3(x, y, z);
+                        vertices[vi++] = new Vector3(x, y, z);
                     }
                 }
             }
@@ -42,9 +42,9 @@ namespace L7RoundedCube
 
         private void OnDrawGizmos()
         {
-            if (_vertices == null) return;
+            if (vertices == null) return;
             Gizmos.color = Color.black;
-            foreach (Vector3 vertex in _vertices)
+            foreach (Vector3 vertex in vertices)
             {
                 Gizmos.DrawSphere(vertex, 0.1f);
             }

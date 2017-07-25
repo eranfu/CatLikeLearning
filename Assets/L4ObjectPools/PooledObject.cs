@@ -7,15 +7,15 @@ namespace L4ObjectPools
     {
         public ObjectPool Pool { private get; set; }
 
-        [NonSerialized] private ObjectPool _poolInstanceForPrefab;
+        [NonSerialized] private ObjectPool poolInstanceForPrefab;
 
         public T GetPooledInstance<T>() where T : PooledObject
         {
-            if (_poolInstanceForPrefab == null)
+            if (poolInstanceForPrefab == null)
             {
-                _poolInstanceForPrefab = ObjectPool.GeneratePool(this);
+                poolInstanceForPrefab = ObjectPool.GeneratePool(this);
             }
-            return (T) _poolInstanceForPrefab.GetObject();
+            return (T) poolInstanceForPrefab.GetObject();
         }
 
         public void ReturnToPool()

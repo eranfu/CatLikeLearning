@@ -2,19 +2,19 @@
 
 namespace L3FramesPerSecond
 {
-    public class FPSCounter : MonoBehaviour
+    public class FpsCounter : MonoBehaviour
     {
-        [SerializeField] private int _frameRange = 60;
+        [SerializeField] private int frameRange = 60;
         public int AverageFps { get; private set; }
         public int HighestFps { get; private set; }
         public int LowestFps { get; private set; }
 
-        private int[] _fpsBuffer;
-        private int _fpsBufferIndex;
+        private int[] fpsBuffer;
+        private int fpsBufferIndex;
 
         private void Update()
         {
-            if (_fpsBuffer == null || _fpsBuffer.Length != _frameRange)
+            if (fpsBuffer == null || fpsBuffer.Length != frameRange)
                 InitializeBuffer();
             UpdateBuffer();
             CalculateFps();
@@ -25,7 +25,7 @@ namespace L3FramesPerSecond
             var sum = 0;
             LowestFps = int.MaxValue;
             HighestFps = 0;
-            foreach (int fps in _fpsBuffer)
+            foreach (int fps in fpsBuffer)
             {
                 sum += fps;
                 if (fps < LowestFps)
@@ -33,22 +33,22 @@ namespace L3FramesPerSecond
                 else if (fps > HighestFps)
                     HighestFps = fps;
             }
-            AverageFps = sum / _fpsBuffer.Length;
+            AverageFps = sum / fpsBuffer.Length;
         }
 
         private void UpdateBuffer()
         {
-            _fpsBuffer[_fpsBufferIndex] = (int) (1f / Time.unscaledDeltaTime);
-            if (++_fpsBufferIndex >= _fpsBuffer.Length)
-                _fpsBufferIndex = 0;
+            fpsBuffer[fpsBufferIndex] = (int) (1f / Time.unscaledDeltaTime);
+            if (++fpsBufferIndex >= fpsBuffer.Length)
+                fpsBufferIndex = 0;
         }
 
         private void InitializeBuffer()
         {
-            if (_frameRange < 1)
-                _frameRange = 1;
-            _fpsBuffer = new int[_frameRange];
-            _fpsBufferIndex = 0;
+            if (frameRange < 1)
+                frameRange = 1;
+            fpsBuffer = new int[frameRange];
+            fpsBufferIndex = 0;
         }
     }
 }

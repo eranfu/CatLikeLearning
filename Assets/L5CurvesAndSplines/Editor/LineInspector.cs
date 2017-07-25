@@ -7,25 +7,25 @@ namespace L5CurvesAndSplines.Editor
     [CustomEditor(typeof(Line))]
     public class LineInspector : UnityEditor.Editor
     {
-        private Line _line;
-        private Transform _handleTransform;
-        private Quaternion _handleRotation;
+        private Line line;
+        private Transform handleTransform;
+        private Quaternion handleRotation;
 
         private void Awake()
         {
-            _line = target as Line;
-            if (_line == null) return;
-            _handleTransform = _line.transform;
+            line = target as Line;
+            if (line == null) return;
+            handleTransform = line.transform;
         }
 
         private void OnSceneGUI()
         {
-            _handleRotation = Tools.pivotRotation == PivotRotation.Local
-                ? _handleTransform.rotation
+            handleRotation = Tools.pivotRotation == PivotRotation.Local
+                ? handleTransform.rotation
                 : Quaternion.identity;
 
-            Vector3 p0 = ShowPoint(ref _line.p0);
-            Vector3 p1 = ShowPoint(ref _line.p1);
+            Vector3 p0 = ShowPoint(ref line.p0);
+            Vector3 p1 = ShowPoint(ref line.p1);
 
             Handles.color = Color.white;
             Handles.DrawLine(p0, p1);
@@ -34,13 +34,13 @@ namespace L5CurvesAndSplines.Editor
 
         private Vector3 ShowPoint(ref Vector3 p)
         {
-            Vector3 point = _handleTransform.TransformPoint(p);
+            Vector3 point = handleTransform.TransformPoint(p);
             EditorGUI.BeginChangeCheck();
-            point = Handles.DoPositionHandle(point, _handleRotation);
+            point = Handles.DoPositionHandle(point, handleRotation);
             if (!EditorGUI.EndChangeCheck()) return point;
-            Undo.RecordObject(_line, "Move Point");
-            EditorUtility.SetDirty(_line);
-            p = _handleTransform.InverseTransformPoint(point);
+            Undo.RecordObject(line, "Move Point");
+            EditorUtility.SetDirty(line);
+            p = handleTransform.InverseTransformPoint(point);
             return point;
         }
     }

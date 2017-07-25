@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Linq;
 using UnityEngine;
 
 namespace L6ProceduralGrid
@@ -9,8 +7,8 @@ namespace L6ProceduralGrid
     public class Grid : MonoBehaviour
     {
         public int width, height;
-        private Vector3[] _vertices;
-        private Mesh _mesh;
+        private Vector3[] vertices;
+        private Mesh mesh;
 
         private void Awake()
         {
@@ -19,25 +17,25 @@ namespace L6ProceduralGrid
 
         private void Generate()
         {
-            GetComponent<MeshFilter>().mesh = _mesh = new Mesh();
-            _mesh.name = "Procedural Grid";
+            GetComponent<MeshFilter>().mesh = mesh = new Mesh();
+            mesh.name = "Procedural Grid";
 
-            _vertices = new Vector3[(width + 1) * (height + 1)];
-            var uv = new Vector2[_vertices.Length];
-            var tangents = new Vector4[_vertices.Length];
+            vertices = new Vector3[(width + 1) * (height + 1)];
+            var uv = new Vector2[vertices.Length];
+            var tangents = new Vector4[vertices.Length];
             var tangent = new Vector4(1, 0, 0, -1);
             for (int i = 0, row = 0; row <= height; row++)
             {
                 for (var column = 0; column <= width; ++column, ++i)
                 {
-                    _vertices[i] = new Vector3(column, row);
+                    vertices[i] = new Vector3(column, row);
                     uv[i] = new Vector2(column / (float) width, row / (float) height);
                     tangents[i] = tangent;
                 }
             }
-            _mesh.vertices = _vertices;
-            _mesh.uv = uv;
-            _mesh.tangents = tangents;
+            mesh.vertices = vertices;
+            mesh.uv = uv;
+            mesh.tangents = tangents;
 
             var triangles = new int[width * height * 6];
             for (int ti = 0, vi = 0, y = 0; y < height; ++y, ++vi)
@@ -50,15 +48,15 @@ namespace L6ProceduralGrid
                     triangles[ti + 5] = vi + width + 2;
                 }
             }
-            _mesh.triangles = triangles;
-            _mesh.RecalculateNormals();
+            mesh.triangles = triangles;
+            mesh.RecalculateNormals();
         }
 
         private void OnDrawGizmos()
         {
-            if (_vertices == null) return;
+            if (vertices == null) return;
             Gizmos.color = Color.black;
-            foreach (Vector3 vertex in _vertices)
+            foreach (Vector3 vertex in vertices)
             {
                 Gizmos.DrawSphere(transform.TransformPoint(vertex), 0.1f);
             }

@@ -4,26 +4,26 @@ namespace L3FramesPerSecond
 {
     public class NucleonSpawner : MonoBehaviour
     {
-        [SerializeField] private float _timeBetweenSpawns;
-        [SerializeField] private float _spawnDistance;
-        [SerializeField] private Nucleon[] _nucleons;
-        private float _timeSinceLastSpawn;
+        [SerializeField] private float timeBetweenSpawns;
+        [SerializeField] private float spawnDistance;
+        [SerializeField] private Nucleon[] nucleons;
+        private float timeSinceLastSpawn;
 
         private void FixedUpdate()
         {
-            _timeSinceLastSpawn += Time.deltaTime;
-            if (_timeSinceLastSpawn >= _timeBetweenSpawns)
+            timeSinceLastSpawn += Time.deltaTime;
+            if (timeSinceLastSpawn >= timeBetweenSpawns)
             {
-                _timeSinceLastSpawn -= _timeBetweenSpawns;
+                timeSinceLastSpawn -= timeBetweenSpawns;
                 SpawnNucleon();
             }
         }
 
         private void SpawnNucleon()
         {
-            Nucleon prefab = _nucleons[Random.Range(0, _nucleons.Length)];
+            Nucleon prefab = nucleons[Random.Range(0, nucleons.Length)];
             var nucleon = Instantiate<Nucleon>(prefab);
-            nucleon.transform.localPosition = Random.onUnitSphere * _spawnDistance;
+            nucleon.transform.localPosition = Random.onUnitSphere * spawnDistance;
         }
     }
 }

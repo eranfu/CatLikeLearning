@@ -7,12 +7,12 @@ namespace L4ObjectPools
     public class Stuff : PooledObject
     {
         public Rigidbody Body { get; private set; }
-        private MeshRenderer[] _meshRenderers;
+        private MeshRenderer[] meshRenderers;
 
         private void Awake()
         {
             Body = GetComponent<Rigidbody>();
-            _meshRenderers = GetComponentsInChildren<MeshRenderer>();
+            meshRenderers = GetComponentsInChildren<MeshRenderer>();
             SceneManager.sceneLoaded += (scene, mode) =>
             {
                 ReturnToPool();
@@ -29,7 +29,7 @@ namespace L4ObjectPools
 
         public void SetMaterial(Material m)
         {
-            foreach (MeshRenderer meshRenderer in _meshRenderers)
+            foreach (MeshRenderer meshRenderer in meshRenderers)
             {
                 meshRenderer.material = m;
             }
