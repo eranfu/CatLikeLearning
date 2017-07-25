@@ -56,7 +56,7 @@ namespace L6ProceduralGrid
 
         private void OnDrawGizmos()
         {
-            if (_vertices == null) Generate();
+            if (_vertices == null) return;
             Gizmos.color = Color.black;
             foreach (Vector3 vertex in _vertices)
             {
