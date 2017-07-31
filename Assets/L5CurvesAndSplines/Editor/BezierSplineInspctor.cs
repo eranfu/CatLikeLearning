@@ -17,6 +17,13 @@ namespace L5CurvesAndSplines.Editor
         private const float pickSize = 0.06f;
         private int selectedIndex;
 
+        private static Color[] modeColors = new[]
+        {
+            Color.white,
+            Color.yellow,
+            Color.cyan
+        };
+
         private void OnEnable()
         {
             spline = target as BezierSpline;
@@ -54,10 +61,23 @@ namespace L5CurvesAndSplines.Editor
 
         public override void OnInspectorGUI()
         {
+            EditorGUI.BeginChangeCheck();
+            bool loop = EditorGUILayout.Toggle("Loop", spline.Loop);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(spline, "Toggle Loop");
+                spline.Loop = loop;
+                EditorUtility.SetDirty(spline);
+            }
+
+            ZeroPoint();
+            CancelSelected();
+
             if (selectedIndex >= 0 && selectedIndex < spline.ControlPointCount)
             {
                 DrawSelectedPointInspector();
             }
+
             if (GUILayout.Button("Add Curve"))
             {
                 Undo.RecordObject(spline, "Add Curve");
@@ -66,15 +86,49 @@ namespace L5CurvesAndSplines.Editor
             }
         }
 
+        private void CancelSelected()
+        {
+            if (!GUILayout.Button("Cancel Selected")) return;
+            selectedIndex = -1;
+            EditorUtility.SetDirty(spline);
+        }
+
+        private void ZeroPoint()
+        {
+            if (!GUILayout.Button("Rise Point At Zero")) return;
+            for (var i = 0; i < spline.ControlPointCount; ++i)
+            {
+                if (spline.GetControlPoint(i) == Vector3.zero)
+                {
+                    Undo.RecordObject(spline, "Rise Point At Zero");
+                    spline.SetControlPoint(i, new Vector3(0, 1, 0));
+                    EditorUtility.SetDirty(spline);
+                    return;
+                }
+            }
+        }
+
         private void DrawSelectedPointInspector()
         {
             GUILayout.Label("Selected Point");
             EditorGUI.BeginChangeCheck();
             Vector3 point = EditorGUILayout.Vector3Field("Position", spline.GetControlPoint(selectedIndex));
-            if (!EditorGUI.EndChangeCheck()) return;
-            Undo.RecordObject(spline, "Move Point");
-            EditorUtility.SetDirty(spline);
-            spline.SetControlPoint(selectedIndex, point);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(spline, "Move Point");
+                EditorUtility.SetDirty(spline);
+                spline.SetControlPoint(selectedIndex, point);
+            }
+
+            EditorGUI.BeginChangeCheck();
+            var mode = (BezierControlPointMode) EditorGUILayout.EnumPopup("Mode",
+                spline.GetControlPointMode(selectedIndex));
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(spline, "Change Point Mode");
+                spline.SetControlPointMode(selectedIndex, mode);
+                EditorUtility.SetDirty(spline);
+            }
         }
 
         private void ShowDirections()
@@ -91,8 +145,10 @@ namespace L5CurvesAndSplines.Editor
         private Vector3 ShowPoint(int index)
         {
             Vector3 point = handleTransform.TransformPoint(spline.GetControlPoint(index));
-            Handles.color = Color.white;
+            Handles.color = modeColors[(int) spline.GetControlPointMode(index)];
             float handleScale = HandleUtility.GetHandleSize(point);
+            if (index == 0)
+                handleScale *= 2;
             if (Handles.Button(point, handleRatation, handleScale * handleSize, handleScale * pickSize,
                 Handles.DotHandleCap))
             {
