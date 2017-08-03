@@ -14,7 +14,7 @@ namespace L7RoundedCube
 
         private void Awake()
         {
-            StartCoroutine(Generate());
+            Generate();
         }
 
         private static int SetQuad(IList<int> triangles, int t, int v00, int v10, int v01, int v11)
@@ -26,15 +26,15 @@ namespace L7RoundedCube
             return t + 6;
         }
 
-        private IEnumerator Generate()
+        private void Generate()
         {
             GetComponent<MeshFilter>().mesh = mesh = new Mesh();
             mesh.name = "Procedural Cube";
-            yield return CreateVertices();
-            yield return CreateTriangles();
+            CreateVertices();
+            CreateTriangles();
         }
 
-        private IEnumerator CreateTriangles()
+        private void CreateTriangles()
         {
             int quads = (xSize * ySize + ySize * zSize + zSize * xSize) * 2;
             var triangles = new int[quads * 6];
@@ -45,15 +45,12 @@ namespace L7RoundedCube
                 for (var q = 0; q < ring - 1; q++, v++)
                 {
                     t = SetQuad(triangles, t, v, v + 1, v + ring, v + ring + 1);
-                    yield return null;
-                    mesh.triangles = triangles;
                 }
                 t = SetQuad(triangles, t, v, v + 1 - ring, v + ring, v + 1);
-                yield return null;
-                mesh.triangles = triangles;
             }
 
             t = CreateTopFace(triangles, t, ring);
+            CreateBottomFace(triangles, t, ring);
             mesh.triangles = triangles;
         }
 
@@ -69,17 +66,62 @@ namespace L7RoundedCube
             int vMin = ring * (ySize + 1) - 1;
             int vMid = vMin + 1;
             int vMax = v + 2;
-            t = SetQuad(triangles, t, vMin, vMid, vMin - 1, vMid + xSize - 1);
-            for (var x = 2; x < xSize; x++, vMid++)
+            for (var z = 2; z < zSize; z++, vMin--, vMax++, vMid++)
             {
-                t = SetQuad(triangles, t, vMid, vMid + 1, vMid + xSize - 1, vMid + xSize);
+                t = SetQuad(triangles, t, vMin, vMid, vMin - 1, vMid + xSize - 1);
+                for (var x = 2; x < xSize; x++, vMid++)
+                {
+                    t = SetQuad(triangles, t, vMid, vMid + 1, vMid + xSize - 1, vMid + xSize);
+                }
+                t = SetQuad(triangles, t, vMid, vMax, vMid + xSize - 1, vMax + 1);
             }
-            t = SetQuad(triangles, t, vMid, vMax, vMid + xSize - 1, vMax + 1);
+
+            int vTop = vMin - 2;
+            t = SetQuad(triangles, t, vMin, vMid, vTop + 1, vTop);
+            for (var x = 2; x < xSize; x++, vMid++, vTop--)
+            {
+                t = SetQuad(triangles, t, vMid, vMid + 1, vTop, vTop - 1);
+            }
+            t = SetQuad(triangles, t, vMid, vMax, vTop, vTop - 1);
 
             return t;
         }
 
-        private IEnumerator CreateVertices()
+        private void CreateBottomFace(IList<int> triangles, int t, int ring)
+        {
+            var v = 1;
+            int vMid = vertices.Length - (xSize - 1) * (zSize - 1);
+            t = SetQuad(triangles, t, ring - 1, vMid, 0, 1);
+            for (var x = 2; x < xSize; x++, v++, vMid++)
+            {
+                t = SetQuad(triangles, t, vMid, vMid + 1, v, v + 1);
+            }
+            t = SetQuad(triangles, t, vMid, v + 2, v, v + 1);
+
+            int vMin = ring - 2;
+            ++vMid;
+            int vMax = v + 3;
+            for (var z = 2; z < zSize; z++, vMin--, vMax++, vMid++)
+            {
+                t = SetQuad(triangles, t, vMin, vMid, vMin + 1, vMid - xSize + 1);
+                for (var x = 2; x < xSize; x++, vMid++)
+                {
+                    t = SetQuad(triangles, t, vMid, vMid + 1, vMid - xSize + 1, vMid - xSize + 2);
+                }
+                t = SetQuad(triangles, t, vMid, vMax, vMid - xSize + 1, vMax - 1);
+            }
+
+            int vTop = vMin - 1;
+            vMid -= xSize - 1;
+            t = SetQuad(triangles, t, vMin, vTop, vMin + 1, vMid);
+            for (var x = 2; x < xSize; x++, vMid++, vTop--)
+            {
+                t = SetQuad(triangles, t, vTop, vTop - 1, vMid, vMid + 1);
+            }
+            SetQuad(triangles, t, vTop, vTop - 1, vMid, vTop - 2);
+        }
+
+        private void CreateVertices()
         {
             const int cornerVertices = 8;
             int edgeVertices = (xSize + ySize + zSize - 3) * 4;
@@ -93,22 +135,18 @@ namespace L7RoundedCube
                 for (var x = 0; x < xSize; x++)
                 {
                     vertices[vi++] = new Vector3(x, y, 0);
-                    yield return null;
                 }
                 for (var z = 0; z < zSize; z++)
                 {
                     vertices[vi++] = new Vector3(xSize, y, z);
-                    yield return null;
                 }
                 for (int x = xSize; x > 0; --x)
                 {
                     vertices[vi++] = new Vector3(x, y, zSize);
-                    yield return null;
                 }
                 for (int z = zSize; z > 0; --z)
                 {
                     vertices[vi++] = new Vector3(0, y, z);
-                    yield return null;
                 }
             }
 
@@ -117,7 +155,6 @@ namespace L7RoundedCube
                 for (var x = 1; x < xSize; x++)
                 {
                     vertices[vi++] = new Vector3(x, ySize, z);
-                    yield return null;
                 }
             }
             for (var z = 1; z < zSize; z++)
@@ -125,7 +162,6 @@ namespace L7RoundedCube
                 for (var x = 1; x < xSize; x++)
                 {
                     vertices[vi++] = new Vector3(x, 0, z);
-                    yield return null;
                 }
             }
 
