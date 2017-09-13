@@ -5,6 +5,10 @@ namespace L9MeshDeformer
     [RequireComponent(typeof(MeshFilter))]
     public class MeshDeformer : MonoBehaviour
     {
+        [SerializeField] private float springForce = 20;
+        [SerializeField] private float damping = 5;
+
+        private float uniformScale = 1;
         private Mesh deformingMesh;
         private Vector3[] originalVertices, displacedVertices;
         private Vector3[] vertexVelocities;
@@ -23,6 +27,7 @@ namespace L9MeshDeformer
 
         private void Update()
         {
+            uniformScale = transform.lossyScale.x;
             for (int i = 0; i < displacedVertices.Length; i++)
             {
                 updateVertex(i);
@@ -33,7 +38,11 @@ namespace L9MeshDeformer
 
         private void updateVertex(int i)
         {
-            displacedVertices[i] += vertexVelocities[i] * Time.deltaTime;
+            Vector3 displacement = displacedVertices[i] - originalVertices[i];
+            displacement *= uniformScale;
+            vertexVelocities[i] -= Time.deltaTime * springForce * displacement;
+            vertexVelocities[i] *= 1 - damping * Time.deltaTime;
+            displacedVertices[i] += Time.deltaTime / uniformScale * vertexVelocities[i];
         }
 
         public void addDeformingForce(Vector3 point, float force)
@@ -46,7 +55,9 @@ namespace L9MeshDeformer
 
         private void addForceToVertex(int i, Vector3 point, float force)
         {
+            point = transform.InverseTransformPoint(point);
             Vector3 pointToVertex = displacedVertices[i] - point;
+            pointToVertex *= uniformScale;
             float attenuatedForce = force / (1 + pointToVertex.sqrMagnitude);
             float velocity = attenuatedForce * Time.deltaTime;
             vertexVelocities[i] += pointToVertex.normalized * velocity;
