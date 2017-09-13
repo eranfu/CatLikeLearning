@@ -18,14 +18,14 @@ namespace L5CurvesAndSplines.Editor
             handleTransform = line.transform;
         }
 
-        private void OnSceneGUI()
+        private void OnSceneGui()
         {
             handleRotation = Tools.pivotRotation == PivotRotation.Local
                 ? handleTransform.rotation
                 : Quaternion.identity;
 
-            Vector3 p0 = ShowPoint(ref line.p0);
-            Vector3 p1 = ShowPoint(ref line.p1);
+            Vector3 p0 = ShowPoint(ref line.P0);
+            Vector3 p1 = ShowPoint(ref line.P1);
 
             Handles.color = Color.white;
             Handles.DrawLine(p0, p1);

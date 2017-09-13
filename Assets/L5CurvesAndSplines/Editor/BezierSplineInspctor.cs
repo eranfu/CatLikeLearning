@@ -17,7 +17,7 @@ namespace L5CurvesAndSplines.Editor
         private const float pickSize = 0.06f;
         private int selectedIndex;
 
-        private static Color[] modeColors = new[]
+        private static Color[] _modeColors = new[]
         {
             Color.white,
             Color.yellow,
@@ -34,7 +34,7 @@ namespace L5CurvesAndSplines.Editor
             selectedIndex = -1;
         }
 
-        private void OnSceneGUI()
+        private void OnSceneGui()
         {
             handleRatation = Tools.pivotRotation == PivotRotation.Local
                 ? handleTransform.rotation
@@ -145,7 +145,7 @@ namespace L5CurvesAndSplines.Editor
         private Vector3 ShowPoint(int index)
         {
             Vector3 point = handleTransform.TransformPoint(spline.GetControlPoint(index));
-            Handles.color = modeColors[(int) spline.GetControlPointMode(index)];
+            Handles.color = _modeColors[(int) spline.GetControlPointMode(index)];
             float handleScale = HandleUtility.GetHandleSize(point);
             if (index == 0)
                 handleScale *= 2;

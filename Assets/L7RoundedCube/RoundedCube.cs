@@ -6,13 +6,13 @@ namespace L7RoundedCube
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
     public class RoundedCube : MonoBehaviour
     {
-        public int xSize, ySize, zSize;
-        public int roundness;
+        public int XSize, YSize, ZSize;
+        public int Roundness;
 
         private Mesh mesh;
         private Vector3[] vertices;
         private Vector3[] normals;
-        private Color32[] cubeUV;
+        private Color32[] cubeUv;
 
         private void Awake()
         {
@@ -39,14 +39,14 @@ namespace L7RoundedCube
 
         private void CreateColliders()
         {
-            int doubleRoundness = roundness * 2;
-            AddBoxCollider(xSize, ySize - doubleRoundness, zSize - doubleRoundness);
-            AddBoxCollider(xSize - doubleRoundness, ySize, zSize - doubleRoundness);
-            AddBoxCollider(xSize - doubleRoundness, ySize - doubleRoundness, zSize);
+            int doubleRoundness = Roundness * 2;
+            AddBoxCollider(XSize, YSize - doubleRoundness, ZSize - doubleRoundness);
+            AddBoxCollider(XSize - doubleRoundness, YSize, ZSize - doubleRoundness);
+            AddBoxCollider(XSize - doubleRoundness, YSize - doubleRoundness, ZSize);
 
-            var min = new Vector3(roundness, roundness, roundness);
-            var mid = new Vector3(xSize / 2f, ySize / 2f, zSize / 2f);
-            Vector3 max = new Vector3(xSize, ySize, zSize) - min;
+            var min = new Vector3(Roundness, Roundness, Roundness);
+            var mid = new Vector3(XSize / 2f, YSize / 2f, ZSize / 2f);
+            Vector3 max = new Vector3(XSize, YSize, ZSize) - min;
 
             AddCapsuleCollider(0, mid.x, min.y, min.z);
             AddCapsuleCollider(0, mid.x, min.y, max.z);
@@ -69,7 +69,7 @@ namespace L7RoundedCube
             var c = gameObject.AddComponent<CapsuleCollider>();
             c.center = new Vector3(x, y, z);
             c.direction = direction;
-            c.radius = roundness;
+            c.radius = Roundness;
             c.height = c.center[direction] * 2;
         }
 
@@ -81,26 +81,26 @@ namespace L7RoundedCube
 
         private void CreateTriangles()
         {
-            var trianglesZ = new int[(xSize * ySize) * 12];
-            var trianglesX = new int[(ySize * zSize) * 12];
-            var trianglesY = new int[(zSize * xSize) * 12];
-            int ring = (xSize + zSize) * 2;
+            var trianglesZ = new int[(XSize * YSize) * 12];
+            var trianglesX = new int[(YSize * ZSize) * 12];
+            var trianglesY = new int[(ZSize * XSize) * 12];
+            int ring = (XSize + ZSize) * 2;
             int tZ = 0, tX = 0, tY = 0, v = 0;
-            for (var y = 0; y < ySize; y++, v++)
+            for (var y = 0; y < YSize; y++, v++)
             {
-                for (var q = 0; q < xSize; q++, v++)
+                for (var q = 0; q < XSize; q++, v++)
                 {
                     tZ = SetQuad(trianglesZ, tZ, v, v + 1, v + ring, v + ring + 1);
                 }
-                for (var q = 0; q < zSize; q++, v++)
+                for (var q = 0; q < ZSize; q++, v++)
                 {
                     tX = SetQuad(trianglesX, tX, v, v + 1, v + ring, v + ring + 1);
                 }
-                for (var q = 0; q < xSize; q++, v++)
+                for (var q = 0; q < XSize; q++, v++)
                 {
                     tZ = SetQuad(trianglesZ, tZ, v, v + 1, v + ring, v + ring + 1);
                 }
-                for (var q = 1; q < zSize; q++, v++)
+                for (var q = 1; q < ZSize; q++, v++)
                 {
                     tX = SetQuad(trianglesX, tX, v, v + 1, v + ring, v + ring + 1);
                 }
@@ -118,29 +118,29 @@ namespace L7RoundedCube
 
         private int CreateTopFace(int[] triangles, int t, int ring)
         {
-            int v = ring * ySize;
-            for (var x = 1; x < xSize; x++, v++)
+            int v = ring * YSize;
+            for (var x = 1; x < XSize; x++, v++)
             {
                 t = SetQuad(triangles, t, v, v + 1, v + ring - 1, v + ring);
             }
             t = SetQuad(triangles, t, v, v + 1, v + ring - 1, v + 2);
 
-            int vMin = ring * (ySize + 1) - 1;
+            int vMin = ring * (YSize + 1) - 1;
             int vMid = vMin + 1;
             int vMax = v + 2;
-            for (var z = 2; z < zSize; z++, vMin--, vMax++, vMid++)
+            for (var z = 2; z < ZSize; z++, vMin--, vMax++, vMid++)
             {
-                t = SetQuad(triangles, t, vMin, vMid, vMin - 1, vMid + xSize - 1);
-                for (var x = 2; x < xSize; x++, vMid++)
+                t = SetQuad(triangles, t, vMin, vMid, vMin - 1, vMid + XSize - 1);
+                for (var x = 2; x < XSize; x++, vMid++)
                 {
-                    t = SetQuad(triangles, t, vMid, vMid + 1, vMid + xSize - 1, vMid + xSize);
+                    t = SetQuad(triangles, t, vMid, vMid + 1, vMid + XSize - 1, vMid + XSize);
                 }
-                t = SetQuad(triangles, t, vMid, vMax, vMid + xSize - 1, vMax + 1);
+                t = SetQuad(triangles, t, vMid, vMax, vMid + XSize - 1, vMax + 1);
             }
 
             int vTop = vMin - 2;
             t = SetQuad(triangles, t, vMin, vMid, vTop + 1, vTop);
-            for (var x = 2; x < xSize; x++, vMid++, vTop--)
+            for (var x = 2; x < XSize; x++, vMid++, vTop--)
             {
                 t = SetQuad(triangles, t, vMid, vMid + 1, vTop, vTop - 1);
             }
@@ -152,9 +152,9 @@ namespace L7RoundedCube
         private void CreateBottomFace(IList<int> triangles, int t, int ring)
         {
             var v = 1;
-            int vMid = vertices.Length - (xSize - 1) * (zSize - 1);
+            int vMid = vertices.Length - (XSize - 1) * (ZSize - 1);
             t = SetQuad(triangles, t, ring - 1, vMid, 0, 1);
-            for (var x = 2; x < xSize; x++, v++, vMid++)
+            for (var x = 2; x < XSize; x++, v++, vMid++)
             {
                 t = SetQuad(triangles, t, vMid, vMid + 1, v, v + 1);
             }
@@ -163,20 +163,20 @@ namespace L7RoundedCube
             int vMin = ring - 2;
             ++vMid;
             int vMax = v + 3;
-            for (var z = 2; z < zSize; z++, vMin--, vMax++, vMid++)
+            for (var z = 2; z < ZSize; z++, vMin--, vMax++, vMid++)
             {
-                t = SetQuad(triangles, t, vMin, vMid, vMin + 1, vMid - xSize + 1);
-                for (var x = 2; x < xSize; x++, vMid++)
+                t = SetQuad(triangles, t, vMin, vMid, vMin + 1, vMid - XSize + 1);
+                for (var x = 2; x < XSize; x++, vMid++)
                 {
-                    t = SetQuad(triangles, t, vMid, vMid + 1, vMid - xSize + 1, vMid - xSize + 2);
+                    t = SetQuad(triangles, t, vMid, vMid + 1, vMid - XSize + 1, vMid - XSize + 2);
                 }
-                t = SetQuad(triangles, t, vMid, vMax, vMid - xSize + 1, vMax - 1);
+                t = SetQuad(triangles, t, vMid, vMax, vMid - XSize + 1, vMax - 1);
             }
 
             int vTop = vMin - 1;
-            vMid -= xSize - 1;
+            vMid -= XSize - 1;
             t = SetQuad(triangles, t, vMin, vTop, vMin + 1, vMid);
-            for (var x = 2; x < xSize; x++, vMid++, vTop--)
+            for (var x = 2; x < XSize; x++, vMid++, vTop--)
             {
                 t = SetQuad(triangles, t, vTop, vTop - 1, vMid, vMid + 1);
             }
@@ -186,45 +186,45 @@ namespace L7RoundedCube
         private void CreateVertices()
         {
             const int cornerVertices = 8;
-            int edgeVertices = (xSize + ySize + zSize - 3) * 4;
-            int faceVertices = 2 * ((xSize - 1) * (ySize - 1) +
-                                    (ySize - 1) * (zSize - 1) +
-                                    (zSize - 1) * (xSize - 1));
+            int edgeVertices = (XSize + YSize + ZSize - 3) * 4;
+            int faceVertices = 2 * ((XSize - 1) * (YSize - 1) +
+                                    (YSize - 1) * (ZSize - 1) +
+                                    (ZSize - 1) * (XSize - 1));
             vertices = new Vector3[cornerVertices + edgeVertices + faceVertices];
             normals = new Vector3[vertices.Length];
-            cubeUV = new Color32[vertices.Length];
+            cubeUv = new Color32[vertices.Length];
 
             var vi = 0;
-            for (var y = 0; y <= ySize; y++)
+            for (var y = 0; y <= YSize; y++)
             {
-                for (var x = 0; x < xSize; x++)
+                for (var x = 0; x < XSize; x++)
                 {
                     SetVertex(vi++, x, y, 0);
                 }
-                for (var z = 0; z < zSize; z++)
+                for (var z = 0; z < ZSize; z++)
                 {
-                    SetVertex(vi++, xSize, y, z);
+                    SetVertex(vi++, XSize, y, z);
                 }
-                for (int x = xSize; x > 0; --x)
+                for (int x = XSize; x > 0; --x)
                 {
-                    SetVertex(vi++, x, y, zSize);
+                    SetVertex(vi++, x, y, ZSize);
                 }
-                for (int z = zSize; z > 0; --z)
+                for (int z = ZSize; z > 0; --z)
                 {
                     SetVertex(vi++, 0, y, z);
                 }
             }
 
-            for (var z = 1; z < zSize; z++)
+            for (var z = 1; z < ZSize; z++)
             {
-                for (var x = 1; x < xSize; x++)
+                for (var x = 1; x < XSize; x++)
                 {
-                    SetVertex(vi++, x, ySize, z);
+                    SetVertex(vi++, x, YSize, z);
                 }
             }
-            for (var z = 1; z < zSize; z++)
+            for (var z = 1; z < ZSize; z++)
             {
-                for (var x = 1; x < xSize; x++)
+                for (var x = 1; x < XSize; x++)
                 {
                     SetVertex(vi++, x, 0, z);
                 }
@@ -232,41 +232,41 @@ namespace L7RoundedCube
 
             mesh.vertices = vertices;
             mesh.normals = normals;
-            mesh.colors32 = cubeUV;
+            mesh.colors32 = cubeUv;
         }
 
         private void SetVertex(int i, int x, int y, int z)
         {
             Vector3 inner = vertices[i] = new Vector3(x, y, z);
 
-            if (x < roundness)
+            if (x < Roundness)
             {
-                inner.x = roundness;
+                inner.x = Roundness;
             }
-            else if (x > xSize - roundness)
+            else if (x > XSize - Roundness)
             {
-                inner.x = xSize - roundness;
+                inner.x = XSize - Roundness;
             }
-            if (y < roundness)
+            if (y < Roundness)
             {
-                inner.y = roundness;
+                inner.y = Roundness;
             }
-            else if (y > ySize - roundness)
+            else if (y > YSize - Roundness)
             {
-                inner.y = ySize - roundness;
+                inner.y = YSize - Roundness;
             }
-            if (z < roundness)
+            if (z < Roundness)
             {
-                inner.z = roundness;
+                inner.z = Roundness;
             }
-            else if (z > zSize - roundness)
+            else if (z > ZSize - Roundness)
             {
-                inner.z = zSize - roundness;
+                inner.z = ZSize - Roundness;
             }
 
             normals[i] = (vertices[i] - inner).normalized;
-            vertices[i] = inner + normals[i] * roundness;
-            cubeUV[i] = new Color32((byte) x, (byte) y, (byte) z, 0);
+            vertices[i] = inner + normals[i] * Roundness;
+            cubeUv[i] = new Color32((byte) x, (byte) y, (byte) z, 0);
         }
 
         private void OnDrawGizmos()

@@ -12,23 +12,23 @@ namespace L8CubeSphere
         private Mesh mesh;
         private Vector3[] vertices;
         private Vector3[] normals;
-        private Color32[] cubeUV;
+        private Color32[] cubeUv;
 
         private void Awake()
         {
-            generate();
+            Generate();
         }
 
-        private void generate()
+        private void Generate()
         {
             GetComponent<MeshFilter>().mesh = mesh = new Mesh();
             mesh.name = "Procedural Cube";
-            createVertices();
-            createTriangles();
-            createColliders();
+            CreateVertices();
+            CreateTriangles();
+            CreateColliders();
         }
 
-        private static int setQuad(IList<int> triangles, int t, int v00, int v10, int v01, int v11)
+        private static int SetQuad(IList<int> triangles, int t, int v00, int v10, int v01, int v11)
         {
             triangles[t] = v00;
             triangles[t + 1] = triangles[t + 4] = v01;
@@ -37,12 +37,12 @@ namespace L8CubeSphere
             return t + 6;
         }
 
-        private void createColliders()
+        private void CreateColliders()
         {
             gameObject.AddComponent<SphereCollider>();
         }
 
-        private void createTriangles()
+        private void CreateTriangles()
         {
             var trianglesZ = new int[(gridSize * gridSize) * 12];
             var trianglesX = new int[(gridSize * gridSize) * 12];
@@ -53,25 +53,25 @@ namespace L8CubeSphere
             {
                 for (var q = 0; q < gridSize; q++, v++)
                 {
-                    tZ = setQuad(trianglesZ, tZ, v, v + 1, v + ring, v + ring + 1);
+                    tZ = SetQuad(trianglesZ, tZ, v, v + 1, v + ring, v + ring + 1);
                 }
                 for (var q = 0; q < gridSize; q++, v++)
                 {
-                    tX = setQuad(trianglesX, tX, v, v + 1, v + ring, v + ring + 1);
+                    tX = SetQuad(trianglesX, tX, v, v + 1, v + ring, v + ring + 1);
                 }
                 for (var q = 0; q < gridSize; q++, v++)
                 {
-                    tZ = setQuad(trianglesZ, tZ, v, v + 1, v + ring, v + ring + 1);
+                    tZ = SetQuad(trianglesZ, tZ, v, v + 1, v + ring, v + ring + 1);
                 }
                 for (var q = 1; q < gridSize; q++, v++)
                 {
-                    tX = setQuad(trianglesX, tX, v, v + 1, v + ring, v + ring + 1);
+                    tX = SetQuad(trianglesX, tX, v, v + 1, v + ring, v + ring + 1);
                 }
-                tX = setQuad(trianglesX, tX, v, v + 1 - ring, v + ring, v + 1);
+                tX = SetQuad(trianglesX, tX, v, v + 1 - ring, v + ring, v + 1);
             }
 
-            tY = createTopFace(trianglesY, tY, ring);
-            createBottomFace(trianglesY, tY, ring);
+            tY = CreateTopFace(trianglesY, tY, ring);
+            CreateBottomFace(trianglesY, tY, ring);
 
             mesh.subMeshCount = 3;
             mesh.SetTriangles(trianglesZ, 0);
@@ -79,74 +79,74 @@ namespace L8CubeSphere
             mesh.SetTriangles(trianglesY, 2);
         }
 
-        private int createTopFace(int[] triangles, int t, int ring)
+        private int CreateTopFace(int[] triangles, int t, int ring)
         {
             int v = ring * gridSize;
             for (var x = 1; x < gridSize; x++, v++)
             {
-                t = setQuad(triangles, t, v, v + 1, v + ring - 1, v + ring);
+                t = SetQuad(triangles, t, v, v + 1, v + ring - 1, v + ring);
             }
-            t = setQuad(triangles, t, v, v + 1, v + ring - 1, v + 2);
+            t = SetQuad(triangles, t, v, v + 1, v + ring - 1, v + 2);
 
             int vMin = ring * (gridSize + 1) - 1;
             int vMid = vMin + 1;
             int vMax = v + 2;
             for (var z = 2; z < gridSize; z++, vMin--, vMax++, vMid++)
             {
-                t = setQuad(triangles, t, vMin, vMid, vMin - 1, vMid + gridSize - 1);
+                t = SetQuad(triangles, t, vMin, vMid, vMin - 1, vMid + gridSize - 1);
                 for (var x = 2; x < gridSize; x++, vMid++)
                 {
-                    t = setQuad(triangles, t, vMid, vMid + 1, vMid + gridSize - 1, vMid + gridSize);
+                    t = SetQuad(triangles, t, vMid, vMid + 1, vMid + gridSize - 1, vMid + gridSize);
                 }
-                t = setQuad(triangles, t, vMid, vMax, vMid + gridSize - 1, vMax + 1);
+                t = SetQuad(triangles, t, vMid, vMax, vMid + gridSize - 1, vMax + 1);
             }
 
             int vTop = vMin - 2;
-            t = setQuad(triangles, t, vMin, vMid, vTop + 1, vTop);
+            t = SetQuad(triangles, t, vMin, vMid, vTop + 1, vTop);
             for (var x = 2; x < gridSize; x++, vMid++, vTop--)
             {
-                t = setQuad(triangles, t, vMid, vMid + 1, vTop, vTop - 1);
+                t = SetQuad(triangles, t, vMid, vMid + 1, vTop, vTop - 1);
             }
-            t = setQuad(triangles, t, vMid, vMax, vTop, vTop - 1);
+            t = SetQuad(triangles, t, vMid, vMax, vTop, vTop - 1);
 
             return t;
         }
 
-        private void createBottomFace(IList<int> triangles, int t, int ring)
+        private void CreateBottomFace(IList<int> triangles, int t, int ring)
         {
             var v = 1;
             int vMid = vertices.Length - (gridSize - 1) * (gridSize - 1);
-            t = setQuad(triangles, t, ring - 1, vMid, 0, 1);
+            t = SetQuad(triangles, t, ring - 1, vMid, 0, 1);
             for (var x = 2; x < gridSize; x++, v++, vMid++)
             {
-                t = setQuad(triangles, t, vMid, vMid + 1, v, v + 1);
+                t = SetQuad(triangles, t, vMid, vMid + 1, v, v + 1);
             }
-            t = setQuad(triangles, t, vMid, v + 2, v, v + 1);
+            t = SetQuad(triangles, t, vMid, v + 2, v, v + 1);
 
             int vMin = ring - 2;
             ++vMid;
             int vMax = v + 3;
             for (var z = 2; z < gridSize; z++, vMin--, vMax++, vMid++)
             {
-                t = setQuad(triangles, t, vMin, vMid, vMin + 1, vMid - gridSize + 1);
+                t = SetQuad(triangles, t, vMin, vMid, vMin + 1, vMid - gridSize + 1);
                 for (var x = 2; x < gridSize; x++, vMid++)
                 {
-                    t = setQuad(triangles, t, vMid, vMid + 1, vMid - gridSize + 1, vMid - gridSize + 2);
+                    t = SetQuad(triangles, t, vMid, vMid + 1, vMid - gridSize + 1, vMid - gridSize + 2);
                 }
-                t = setQuad(triangles, t, vMid, vMax, vMid - gridSize + 1, vMax - 1);
+                t = SetQuad(triangles, t, vMid, vMax, vMid - gridSize + 1, vMax - 1);
             }
 
             int vTop = vMin - 1;
             vMid -= gridSize - 1;
-            t = setQuad(triangles, t, vMin, vTop, vMin + 1, vMid);
+            t = SetQuad(triangles, t, vMin, vTop, vMin + 1, vMid);
             for (var x = 2; x < gridSize; x++, vMid++, vTop--)
             {
-                t = setQuad(triangles, t, vTop, vTop - 1, vMid, vMid + 1);
+                t = SetQuad(triangles, t, vTop, vTop - 1, vMid, vMid + 1);
             }
-            setQuad(triangles, t, vTop, vTop - 1, vMid, vTop - 2);
+            SetQuad(triangles, t, vTop, vTop - 1, vMid, vTop - 2);
         }
 
-        private void createVertices()
+        private void CreateVertices()
         {
             const int cornerVertices = 8;
             int edgeVertices = (gridSize + gridSize + gridSize - 3) * 4;
@@ -155,26 +155,26 @@ namespace L8CubeSphere
                                     (gridSize - 1) * (gridSize - 1));
             vertices = new Vector3[cornerVertices + edgeVertices + faceVertices];
             normals = new Vector3[vertices.Length];
-            cubeUV = new Color32[vertices.Length];
+            cubeUv = new Color32[vertices.Length];
 
             var vi = 0;
             for (var y = 0; y <= gridSize; y++)
             {
                 for (var x = 0; x < gridSize; x++)
                 {
-                    setVertex(vi++, x, y, 0);
+                    SetVertex(vi++, x, y, 0);
                 }
                 for (var z = 0; z < gridSize; z++)
                 {
-                    setVertex(vi++, gridSize, y, z);
+                    SetVertex(vi++, gridSize, y, z);
                 }
                 for (int x = gridSize; x > 0; --x)
                 {
-                    setVertex(vi++, x, y, gridSize);
+                    SetVertex(vi++, x, y, gridSize);
                 }
                 for (int z = gridSize; z > 0; --z)
                 {
-                    setVertex(vi++, 0, y, z);
+                    SetVertex(vi++, 0, y, z);
                 }
             }
 
@@ -182,23 +182,23 @@ namespace L8CubeSphere
             {
                 for (var x = 1; x < gridSize; x++)
                 {
-                    setVertex(vi++, x, gridSize, z);
+                    SetVertex(vi++, x, gridSize, z);
                 }
             }
             for (var z = 1; z < gridSize; z++)
             {
                 for (var x = 1; x < gridSize; x++)
                 {
-                    setVertex(vi++, x, 0, z);
+                    SetVertex(vi++, x, 0, z);
                 }
             }
 
             mesh.vertices = vertices;
             mesh.normals = normals;
-            mesh.colors32 = cubeUV;
+            mesh.colors32 = cubeUv;
         }
 
-        private void setVertex(int i, int x, int y, int z)
+        private void SetVertex(int i, int x, int y, int z)
         {
             Vector3 v = new Vector3(x, y, z) * 2f / gridSize - Vector3.one;
             float x2 = v.x * v.x;
@@ -210,7 +210,7 @@ namespace L8CubeSphere
             s.z = v.z * Mathf.Sqrt(1 - y2 / 2f - x2 / 2f + y2 * x2 / 3f);
             normals[i] = s;
             vertices[i] = normals[i] * radius;
-            cubeUV[i] = new Color32((byte) x, (byte) y, (byte) z, 0);
+            cubeUv[i] = new Color32((byte) x, (byte) y, (byte) z, 0);
         }
 
         private void OnDrawGizmos()

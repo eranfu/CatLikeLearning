@@ -10,8 +10,8 @@ namespace L3FramesPerSecond
         [Serializable]
         private struct FpsColor
         {
-            public Color color;
-            public int minimumFps;
+            public Color Color;
+            public int MinimumFps;
         }
 
         [SerializeField] private Text highestFpsLabel;
@@ -20,7 +20,7 @@ namespace L3FramesPerSecond
         [SerializeField] private FpsColor[] coloring;
         private FpsCounter fpsCounter;
 
-        private static readonly string[] stringsFrom0To99 =
+        private static readonly string[] StringsFrom0To99 =
         {
             "00", "01", "02", "03", "04", "05", "06", "07", "08", "09",
             "10", "11", "02", "03", "04", "05", "06", "07", "08", "09",
@@ -48,11 +48,11 @@ namespace L3FramesPerSecond
 
         private void Display(Text label, int fps)
         {
-            label.text = stringsFrom0To99[Mathf.Clamp(fps, 0, 99)];
+            label.text = StringsFrom0To99[Mathf.Clamp(fps, 0, 99)];
             for (var i = 0; i < coloring.Length; i++)
             {
-                if (coloring[i].minimumFps > fps) continue;
-                label.color = coloring[i].color;
+                if (coloring[i].MinimumFps > fps) continue;
+                label.color = coloring[i].Color;
                 break;
             }
         }

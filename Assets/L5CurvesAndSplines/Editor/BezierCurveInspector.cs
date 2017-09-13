@@ -26,7 +26,7 @@ namespace L5CurvesAndSplines.Editor
             directionScale = 0.5f;
         }
 
-        private void OnSceneGUI()
+        private void OnSceneGui()
         {
             handleRatation = Tools.pivotRotation == PivotRotation.Local
                 ? handleTransform.rotation
@@ -57,13 +57,13 @@ namespace L5CurvesAndSplines.Editor
 
         private Vector3 ShowPoint(int index)
         {
-            Vector3 point = handleTransform.TransformPoint(curve.points[index]);
+            Vector3 point = handleTransform.TransformPoint(curve.Points[index]);
             EditorGUI.BeginChangeCheck();
             point = Handles.DoPositionHandle(point, handleRatation);
             if (!EditorGUI.EndChangeCheck()) return point;
             Undo.RecordObject(curve, "Move Point");
             EditorUtility.SetDirty(curve);
-            curve.points[index] = handleTransform.InverseTransformPoint(point);
+            curve.Points[index] = handleTransform.InverseTransformPoint(point);
             return point;
         }
     }

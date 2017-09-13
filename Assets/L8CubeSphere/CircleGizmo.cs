@@ -11,18 +11,18 @@ namespace L8CubeSphere
             float step = 2f / resolution;
             for (var i = 0; i <= resolution; i++)
             {
-                showPoint(i * step - 1, -1);
-                showPoint(i * step - 1, 1);
+                ShowPoint(i * step - 1, -1);
+                ShowPoint(i * step - 1, 1);
             }
 
             for (var i = 1; i < resolution; ++i)
             {
-                showPoint(-1, i * step - 1);
-                showPoint(1, i * step - 1);
+                ShowPoint(-1, i * step - 1);
+                ShowPoint(1, i * step - 1);
             }
         }
 
-        private void showPoint(float x, float y)
+        private void ShowPoint(float x, float y)
         {
             var square = new Vector2(x, y);
             Vector2 circle;

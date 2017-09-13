@@ -11,11 +11,11 @@ namespace L9MeshDeformer
         {
             if (Input.GetMouseButton(0))
             {
-                handleInput();
+                HandleInput();
             }
         }
 
-        private void handleInput()
+        private void HandleInput()
         {
             Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -26,7 +26,7 @@ namespace L9MeshDeformer
                 {
                     Vector3 hitPoint = hit.point;
                     hitPoint += hit.normal * offset;
-                    meshDeformer.addDeformingForce(hitPoint, force);
+                    meshDeformer.AddDeformingForce(hitPoint, force);
                 }
             }
         }

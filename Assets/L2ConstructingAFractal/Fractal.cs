@@ -5,7 +5,7 @@ namespace L2ConstructingAFractal
 {
     public class Fractal : MonoBehaviour
     {
-        private static readonly Vector3[] childDirections =
+        private static readonly Vector3[] ChildDirections =
         {
             Vector3.up,
             Vector3.right,
@@ -14,7 +14,7 @@ namespace L2ConstructingAFractal
             Vector3.back,
         };
 
-        private static readonly Quaternion[] childOrientations =
+        private static readonly Quaternion[] ChildOrientations =
         {
             Quaternion.identity,
             Quaternion.Euler(0, 0, -90),
@@ -78,7 +78,7 @@ namespace L2ConstructingAFractal
 
         private IEnumerator CreateChildren()
         {
-            for (var i = 0; i < childDirections.Length; ++i)
+            for (var i = 0; i < ChildDirections.Length; ++i)
             {
                 if (Random.value > spawnProbability) continue;
                 yield return new WaitForSeconds(Random.Range(0, 0.5f));
@@ -100,8 +100,8 @@ namespace L2ConstructingAFractal
 
             transform.parent = parent.transform;
             transform.localScale = Vector3.one * childScale;
-            transform.localPosition = childDirections[i] * (0.5f + 0.5f * childScale);
-            transform.localRotation = childOrientations[i];
+            transform.localPosition = ChildDirections[i] * (0.5f + 0.5f * childScale);
+            transform.localRotation = ChildOrientations[i];
         }
     }
 }

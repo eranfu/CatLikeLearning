@@ -10,24 +10,24 @@ namespace L1Clock
             minutesToDegrees = -360f / 60f,
             secondsToDegrees = -360f / 60f;
 
-        public Transform hours, minutes, seconds;
-        public bool analog;
+        public Transform Hours, Minutes, Seconds;
+        public bool Analog;
 
         private void Update()
         {
-            if (analog)
+            if (Analog)
             {
                 TimeSpan time = DateTime.Now.TimeOfDay;
-                hours.localRotation = Quaternion.Euler(0, 0, (float) time.TotalHours * hoursToDegrees);
-                minutes.localRotation = Quaternion.Euler(0, 0, (float) (time.TotalMinutes * minutesToDegrees));
-                seconds.localRotation = Quaternion.Euler(0, 0, (float) (time.TotalSeconds * secondsToDegrees));
+                Hours.localRotation = Quaternion.Euler(0, 0, (float) time.TotalHours * hoursToDegrees);
+                Minutes.localRotation = Quaternion.Euler(0, 0, (float) (time.TotalMinutes * minutesToDegrees));
+                Seconds.localRotation = Quaternion.Euler(0, 0, (float) (time.TotalSeconds * secondsToDegrees));
             }
             else
             {
                 DateTime time = DateTime.Now;
-                hours.localRotation = Quaternion.Euler(0, 0, time.Hour * hoursToDegrees);
-                minutes.localRotation = Quaternion.Euler(0, 0, time.Minute * minutesToDegrees);
-                seconds.localRotation = Quaternion.Euler(0, 0, time.Second * secondsToDegrees);
+                Hours.localRotation = Quaternion.Euler(0, 0, time.Hour * hoursToDegrees);
+                Minutes.localRotation = Quaternion.Euler(0, 0, time.Minute * minutesToDegrees);
+                Seconds.localRotation = Quaternion.Euler(0, 0, time.Second * secondsToDegrees);
             }
         }
     }
