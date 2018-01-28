@@ -32,11 +32,11 @@
             void MyVertexProgram(VertexData v, out Interpolators i) {
                 i.position = UnityObjectToClipPos(v.position);
                 i.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                i.normal = mul((float3x3)unity_ObjectToWorld, v.normal);
-                i.normal = normalize(i.normal);
+                i.normal = UnityObjectToWorldNormal(v.normal);
             }
 
             void MyFragmentProgram(Interpolators i, out float4 color : SV_TARGET) {
+                i.normal = normalize(i.normal);
                 color = float4(i.normal * 0.5 + 0.5, 1);
             }
 
