@@ -45,13 +45,13 @@
                 i.normal = normalize(i.normal);
                 float3 lightDir = _WorldSpaceLightPos0.xyz;
                 float3 viewDir = normalize(_WorldSpaceCameraPos - i.worldPos);
-
+                float3 reflectionDir = reflect(-lightDir, i.normal);
+                
                 float3 lightColor = _LightColor0.rgb;
                 float3 albedo = tex2D(_MainTex, i.uv);
                 float3 diffuse = albedo * lightColor * DotClamped(lightDir, i.normal);
 
-                color = float4(diffuse, 1);
-                color *= _Tint;
+                color = DotClamped(viewDir, reflectionDir);
             }
 
             ENDCG
