@@ -2,6 +2,7 @@
     Properties {
         _Tint("Tint", Color) = (1, 1, 1, 1)
         _MainTex("Albedo", 2D) = "white" {}
+        _Smoothness("Smoothness", Range(0, 1)) = 0.5
     }
 
     SubShader {
@@ -33,6 +34,7 @@
             float4 _Tint;
             sampler2D _MainTex;
             float4 _MainTex_ST;
+            float _Smoothness;
 
             void MyVertexProgram(VertexData v, out Interpolators i) {
                 i.position = UnityObjectToClipPos(v.position);
@@ -51,7 +53,7 @@
                 float3 albedo = tex2D(_MainTex, i.uv);
                 float3 diffuse = albedo * lightColor * DotClamped(lightDir, i.normal);
 
-                color = DotClamped(viewDir, reflectionDir);
+                color = pow(DotClamped(viewDir, reflectionDir), _Smoothness * 100);
             }
 
             ENDCG
