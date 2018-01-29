@@ -56,7 +56,7 @@
                 float3 diffuse = albedo * lightColor * DotClamped(lightDir, i.normal);
                 float3 specular = _SpecularTint * lightColor * pow(DotClamped(halfVector, i.normal), _Smoothness * 100);
 
-                color = float4(specular, 1);
+                color = float4(diffuse + specular, 1);
             }
 
             ENDCG
