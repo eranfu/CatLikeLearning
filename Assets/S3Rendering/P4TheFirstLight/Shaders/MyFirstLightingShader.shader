@@ -11,7 +11,7 @@
             #pragma vertex MyVertexProgram
             #pragma fragment MyFragmentProgram
 
-            #include "UnityCG.cginc"
+            #include "UnityStandardBRDF.cginc"
 
             struct VertexData {                
                 float4 position : POSITION;
@@ -37,7 +37,7 @@
 
             void MyFragmentProgram(Interpolators i, out float4 color : SV_TARGET) {
                 i.normal = normalize(i.normal);
-                color = float4(i.normal * 0.5 + 0.5, 1);
+                color = DotClamped(float3(0, 1, 0), i.normal);
             }
 
             ENDCG
