@@ -2,6 +2,7 @@
     Properties {
         _Tint("Tint", Color) = (1, 1, 1, 1)
         _MainTex("Albedo", 2D) = "white" {}
+        _SpecularTint("Specular", Color) = (0.5, 0.5, 0.5)
         _Smoothness("Smoothness", Range(0, 1)) = 0.5
     }
 
@@ -34,6 +35,7 @@
             float4 _Tint;
             sampler2D _MainTex;
             float4 _MainTex_ST;
+            float3 _SpecularTint;
             float _Smoothness;
 
             void MyVertexProgram(VertexData v, out Interpolators i) {
@@ -52,8 +54,9 @@
                 float3 lightColor = _LightColor0.rgb;
                 float3 albedo = tex2D(_MainTex, i.uv);
                 float3 diffuse = albedo * lightColor * DotClamped(lightDir, i.normal);
+                float3 specular = _SpecularTint * lightColor * pow(DotClamped(halfVector, i.normal), _Smoothness * 100);
 
-                color = pow(DotClamped(halfVector, i.normal), _Smoothness * 100);
+                color = float4(specular, 1);
             }
 
             ENDCG
