@@ -1,4 +1,7 @@
-﻿#include "UnityPBSLighting.cginc"
+﻿#ifndef MY_LIGHTING_INCLUDED
+#define MY_LIGHTING_INCLUDED
+
+#include "UnityPBSLighting.cginc"
 
 float4 _Tint;
 sampler2D _MainTex;
@@ -55,3 +58,5 @@ float4 MyFragmentProgram (Interpolators i) : SV_TARGET {
         i.normal, viewDir,
         light, indirectLight);
 }
+
+#endif
