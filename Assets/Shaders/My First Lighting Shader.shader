@@ -13,7 +13,7 @@
 			Tags {
 				"LightMode" = "ForwardBase"
 			}
-
+            
 			CGPROGRAM
 
             #pragma target 3.0
@@ -25,5 +25,25 @@
 
 			ENDCG
 		}
+
+        Pass {
+            Tags {
+                "LightMode" = "ForwardAdd"
+            }
+
+            Blend One One
+            ZWrite Off
+
+            CGPROGRAM
+
+            #pragma target 3.0
+
+            #pragma vertex MyVertexProgram
+            #pragma fragment MyFragmentProgram
+
+            #include "MyLighting.cginc"
+
+            ENDCG
+        }
 	}
 }
