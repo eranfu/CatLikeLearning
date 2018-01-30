@@ -65,11 +65,20 @@ Shader "Custom/My First Lighting Shader" {
                 float oneMinusReflectivity;
                 albedo = DiffuseAndSpecularFromMetallic(albedo, _Metallic, specularTint, oneMinusReflectivity);
                 
+                UnityLight light;
+                light.color = lightColor;
+                light.dir = lightDir;
+                light.ndotl = DotClamped(lightDir, i.normal);
+
+                UnityIndirect indirectLight;
+                indirectLight.diffuse = 0;
+                indirectLight.specular = 0;
+
 				return UNITY_BRDF_PBS(
                     albedo, specularTint,
                     oneMinusReflectivity, _Smoothness,
                     i.normal, viewDir,
-                    );
+                    light, indirectLight);
 			}
 
 			ENDCG
