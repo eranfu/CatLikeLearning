@@ -18,11 +18,12 @@ Shader "Custom/My First Lighting Shader" {
 
 			CGPROGRAM
 
+            #pragma target 3.0
+
 			#pragma vertex MyVertexProgram
 			#pragma fragment MyFragmentProgram
 
-			#include "UnityStandardBRDF.cginc"
-            #include "UnityStandardUtils.cginc"
+            #include "UnityPBSLighting.cginc"
 
 			float4 _Tint;
 			sampler2D _MainTex;
@@ -63,16 +64,12 @@ Shader "Custom/My First Lighting Shader" {
                 float3 specularTint;
                 float oneMinusReflectivity;
                 albedo = DiffuseAndSpecularFromMetallic(albedo, _Metallic, specularTint, oneMinusReflectivity);
-
-				float3 diffuse = albedo * lightColor * DotClamped(lightDir, i.normal);
-
-				float3 halfVector = normalize(lightDir + viewDir);
-				float3 specular = specularTint * lightColor * pow(
-					DotClamped(halfVector, i.normal),
-					_Smoothness * 100
-				);
-
-				return float4(diffuse + specular, 1);
+                
+				return UNITY_BRDF_PBS(
+                    albedo, specularTint,
+                    oneMinusReflectivity, _Smoothness,
+                    i.normal, viewDir,
+                    );
 			}
 
 			ENDCG
