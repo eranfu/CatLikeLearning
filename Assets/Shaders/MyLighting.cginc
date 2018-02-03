@@ -1,6 +1,7 @@
 ﻿#ifndef MY_LIGHTING_INCLUDED
 #define MY_LIGHTING_INCLUDED
 
+#include "AutoLight.cginc"
 #include "UnityPBSLighting.cginc"
 
 float4 _Tint;
@@ -34,9 +35,8 @@ Interpolators MyVertexProgram (VertexData v) {
 
 UnityLight CreateLight(Interpolators i) {
 	UnityLight light;
-    float3 lightVec = _WorldSpaceLightPos0.xyz - i.worldPos;
-    light.dir = normalize(lightVec);
-    float attenuation = 1 / (1 + dot(lightVec, lightVec));
+    light.dir = normalize(_WorldSpaceLightPos0.xyz - i.worldPos);
+    UNITY_LIGHT_ATTENUATION(attenuation, 0, i.worldPos);
     light.color = _LightColor0.rgb * attenuation;
 	light.ndotl = DotClamped(i.normal, light.dir);
 	return light;

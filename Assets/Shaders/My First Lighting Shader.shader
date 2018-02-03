@@ -41,6 +41,7 @@
             #pragma vertex MyVertexProgram
             #pragma fragment MyFragmentProgram
 
+            #define POINT
             #include "MyLighting.cginc"
 
             ENDCG
