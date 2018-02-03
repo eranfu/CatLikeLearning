@@ -32,11 +32,11 @@ Interpolators MyVertexProgram (VertexData v) {
 	return i;
 }
 
-UnityLight CreateLight(float3 normal) {
+UnityLight CreateLight(Interpolators i) {
 	UnityLight light;
-	light.dir = _WorldSpaceLightPos0.xyz;
+    light.dir = normalize(_WorldSpaceLightPos0.xyz - i.worldPos);
     light.color = _LightColor0.rgb;
-	light.ndotl = DotClamped(normal, light.dir);
+	light.ndotl = DotClamped(i.normal, light.dir);
 	return light;
 }
 
@@ -57,7 +57,7 @@ float4 MyFragmentProgram (Interpolators i) : SV_TARGET {
         albedo, specularTint,
         oneMinusReflectivity, _Smoothness,
         i.normal, viewDir,
-        CreateLight(i.normal), indirectLight);
+        CreateLight(i), indirectLight);
 }
 
 #endif
